@@ -13,11 +13,11 @@ const getRandomInt = () => Math.random() * 1000;
 const takeFirstResolvingToTrueOrAllFalse = urls => {
   const obs$ = from(urls);
 
-  const results$ = obs$.pipe(
+  return obs$.pipe(
     flatMap(url =>
       delayedPromise(getRandomInt(), {
         message: `Response from ${url}`,
-        value: getRandomInt()
+        value: isOdd(getRandomInt())
       })
     ),
     scan(
@@ -40,8 +40,6 @@ const takeFirstResolvingToTrueOrAllFalse = urls => {
       true
     )
   );
-
-  return results$;
 };
 
 const urls = ["url-1", "url-2", "url-3", "url-4"];
