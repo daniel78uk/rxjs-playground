@@ -10,6 +10,21 @@ const delayedPromise = (time, value) =>
 
 const getRandomInt = () => Math.random() * 1000;
 
+const scanStepper = (acc, curr) => {
+  const { counter } = acc;
+  const { value, message } = curr;
+
+  return {
+    ...acc,
+    counter: counter + 1,
+    lastValue: value,
+    lastMessage: message
+  };
+};
+
+const takeTrueOrAllFalse = ({ counter, lastValue }) =>
+  counter <= urls.length - 1 && lastValue === false;
+
 const takeFirstResolvingToTrueOrAllFalse = urls => {
   const obs$ = from(urls);
 
@@ -20,25 +35,8 @@ const takeFirstResolvingToTrueOrAllFalse = urls => {
         value: isOdd(getRandomInt())
       })
     ),
-    scan(
-      (acc, curr) => {
-        const { counter } = acc;
-        const { value, message } = curr;
-
-        return {
-          ...acc,
-          counter: counter + 1,
-          lastValue: value,
-          lastMessage: message
-        };
-      },
-      { counter: 0, lastValue: false, lastMessage: "" }
-    ),
-    takeWhile(
-      ({ counter, lastValue }) =>
-        counter <= urls.length - 1 && lastValue === false,
-      true
-    )
+    scan(scanStepper, { counter: 0, lastValue: false, lastMessage: "" }),
+    takeWhile(takeTrueOrAllFalse, true)
   );
 };
 
