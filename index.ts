@@ -1,6 +1,11 @@
 import { from, forkJoin } from "rxjs";
 import { flatMap, takeWhile, scan } from "rxjs/operators";
 
+/*
+ The scope of this exercise is to get the first resolving promise to true.
+ Promises might return all false so it has to wait in that case for all to resolve.
+*/
+
 const isOdd = n => !!(n % 2);
 
 const delayedPromise = (time, value) =>
