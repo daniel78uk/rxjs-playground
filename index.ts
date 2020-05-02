@@ -25,10 +25,8 @@ const scanStepper = (acc, curr) => {
 const takeTrueOrAllFalse = ({ counter, lastValue }) =>
   counter <= urls.length - 1 && lastValue === false;
 
-const takeFirstResolvingToTrueOrAllFalse = urls => {
-  const obs$ = from(urls);
-
-  return obs$.pipe(
+const takeFirstResolvingToTrueOrAllFalse = urls =>
+  from(urls).pipe(
     flatMap(url =>
       delayedPromise(getRandomInt(), {
         message: `Response from ${url}`,
@@ -38,17 +36,16 @@ const takeFirstResolvingToTrueOrAllFalse = urls => {
     scan(scanStepper, { counter: 0, lastValue: false, lastMessage: "" }),
     takeWhile(takeTrueOrAllFalse, true)
   );
-};
 
 const urls = ["url-1", "url-2", "url-3", "url-4"];
 
 const types = ["foo", "bar"];
 
-const allquerySource$ = types.reduce(
+const allquerySources$ = types.reduce(
   (acc, type) => ({ ...acc, [type]: takeFirstResolvingToTrueOrAllFalse(urls) }),
   {}
 );
 
-const allQueries = forkJoin(allquerySource$)
+const allQueries = forkJoin(allquerySources$)
   .toPromise()
   .then(res => console.log(res));
