@@ -39,7 +39,7 @@ const takeFirstResolvingToTrueOrAllFalse = urls =>
       })
     ),
     scan(scanStepper, { counter: 0 }),
-    takeWhile(takeTrueOrAllFalse(urls), true)
+    takeWhile(takeTrueOrAllFalse(urls), true) // this is an RxJs thing, if you dont pass the additional param true it will not emit the values
   );
 
 const urls = ["url-1", "url-2", "url-3", "url-4"];
