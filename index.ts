@@ -22,7 +22,7 @@ const scanStepper = (acc, curr) => {
   };
 };
 
-const takeTrueOrAllFalse = ({ counter, lastValue }) =>
+const takeTrueOrAllFalse = urls => ({ counter, lastValue }) =>
   counter <= urls.length - 1 && lastValue === false;
 
 const takeFirstResolvingToTrueOrAllFalse = urls =>
@@ -34,7 +34,7 @@ const takeFirstResolvingToTrueOrAllFalse = urls =>
       })
     ),
     scan(scanStepper, { counter: 0, lastValue: false, lastMessage: "" }),
-    takeWhile(takeTrueOrAllFalse, true)
+    takeWhile(takeTrueOrAllFalse(urls), true)
   );
 
 const urls = ["url-1", "url-2", "url-3", "url-4"];
