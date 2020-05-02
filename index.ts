@@ -27,7 +27,7 @@ const scanStepper = (acc, curr) => {
   };
 };
 
-const takeTrueOrAllFalse = maxCount => ({ counter, lastValue }) =>
+const checkTrueOrAllFalse = maxCount => ({ counter, lastValue }) =>
   counter <= maxCount.length - 1 && lastValue === false;
 
 const takeFirstResolvingToTrueOrAllFalse = urls =>
@@ -39,19 +39,19 @@ const takeFirstResolvingToTrueOrAllFalse = urls =>
       })
     ),
     scan(scanStepper, { counter: 0 }),
-    takeWhile(takeTrueOrAllFalse(urls), true) // this is an RxJs thing, if you dont pass the additional param true it will not emit the values
+    takeWhile(checkTrueOrAllFalse(urls), true) // this is an RxJs thing, if you dont pass the additional param true it will not emit the values
   );
 
 const urls = ["url-1", "url-2", "url-3", "url-4"];
 
 const types = ["foo", "bar"];
 
-const allquerySources$ = types.reduce(
+const allQuerySources$ = types.reduce(
   (acc, type) => ({ ...acc, [type]: takeFirstResolvingToTrueOrAllFalse(urls) }),
   {}
 );
 
-const allQueries = forkJoin(allquerySources$)
+const allQueries = forkJoin(allQuerySources$)
   .toPromise()
   .then(res => console.log(res));
 
