@@ -8,7 +8,7 @@ const delayedPromise = (time, value) =>
     setTimeout(resolve.bind(null, value), time);
   });
 
-const getRandomInt = () => Math.random() * 1000;
+const getRandomInt = () => Math.floor(Math.random() * 1000);
 
 const scanStepper = (acc, curr) => {
   const { counter } = acc;
@@ -33,7 +33,7 @@ const takeFirstResolvingToTrueOrAllFalse = urls =>
         value: isOdd(getRandomInt())
       })
     ),
-    scan(scanStepper, { counter: 0, lastValue: false, lastMessage: "" }),
+    scan(scanStepper, { counter: 0 }),
     takeWhile(takeTrueOrAllFalse(urls), true)
   );
 
@@ -49,3 +49,4 @@ const allquerySources$ = types.reduce(
 const allQueries = forkJoin(allquerySources$)
   .toPromise()
   .then(res => console.log(res));
+
