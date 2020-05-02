@@ -22,8 +22,8 @@ const scanStepper = (acc, curr) => {
   };
 };
 
-const takeTrueOrAllFalse = urls => ({ counter, lastValue }) =>
-  counter <= urls.length - 1 && lastValue === false;
+const takeTrueOrAllFalse = maxCount => ({ counter, lastValue }) =>
+  counter <= maxCount.length - 1 && lastValue === false;
 
 const takeFirstResolvingToTrueOrAllFalse = urls =>
   from(urls).pipe(
