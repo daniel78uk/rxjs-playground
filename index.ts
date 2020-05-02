@@ -10,7 +10,7 @@ const delayedPromise = (time, value) =>
 
 const getRandomInt = () => Math.random() * 1000;
 
-const takeFirstResolvingToTrueOrAllFalse = (urls, type) => {
+const takeFirstResolvingToTrueOrAllFalse = urls => {
   const obs$ = from(urls);
 
   const results$ = obs$.pipe(
@@ -46,13 +46,13 @@ const takeFirstResolvingToTrueOrAllFalse = (urls, type) => {
 
 const urls = ["url-1", "url-2", "url-3", "url-4"];
 
-const allQueries$ = forkJoin({
-  foo: takeFirstResolvingToTrueOrAllFalse(urls, "foo"),
-  bar: takeFirstResolvingToTrueOrAllFalse(urls, "bar")
-});
+const types = ["foo", "bar"];
 
-allQueries$.subscribe(
-  val => console.log("===>allQueries", val),
-  err => console.log("===>allQueries", err),
-  () => console.log("===>allQueries completed")
+const allquerySource$ = types.reduce(
+  (acc, type) => ({ ...acc, [type]: takeFirstResolvingToTrueOrAllFalse(urls) }),
+  {}
 );
+
+const allQueries = forkJoin(allquerySource$)
+  .toPromise()
+  .then(res => console.log(res));
