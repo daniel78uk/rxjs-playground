@@ -52,6 +52,5 @@ const allQuerySources$ = types.reduce(
 );
 
 const allQueries = forkJoin(allQuerySources$)
-  .toPromise()
+  .toPromise() 
   .then(res => console.log(res));
-
